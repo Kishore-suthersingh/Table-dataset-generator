@@ -1,4 +1,4 @@
-# Antigravity Synthetic Data Generation System
+# Synthetic Data Generation System
 
 A sophisticated multi-stage workflow system that generates realistic synthetic tabular data by combining live database context with user-specified anomaly patterns.
 
