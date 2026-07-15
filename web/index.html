@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Antigravity v2.0 - Pattern-Based Generation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --dark-lighter: #334155;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        /* Mode Switcher */
+        .mode-switcher {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 1.5rem;
+            background: white;
+            border: 3px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mode-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .mode-btn.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .mode-btn h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-btn p {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        /* File Upload Zone */
+        .upload-zone {
+            border: 3px dashed var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary);
+            background: var(--light);
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--primary);
+            background: #eef2ff;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 1.125rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Input Elements */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        textarea,
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        textarea:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--dark);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--dark-lighter);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--dark);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background: var(--light);
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .file-info {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .file-info strong {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 Universal Antigravity <span class="badge">v2.0</span></h1>
+            <p>Schema-agnostic synthetic data generator with pattern-based learning</p>
+        </div>
+
+        <!-- Mode Switcher -->
+        <div class="mode-switcher">
+            <div class="mode-btn active" id="promptModeBtn" onclick="switchMode('prompt')">
+                <h3>💬 Prompt Mode</h3>
+                <p>Generate from natural language description</p>
+            </div>
+            <div class="mode-btn" id="patternModeBtn" onclick="switchMode('pattern')">
+                <h3>📊 Pattern Mode</h3>
+                <p>Upload sample & learn patterns</p>
+            </div>
+        </div>
+
+        <!-- Prompt Mode -->
+        <div id="promptMode" class="card">
+            <h2 class="card-title">Generate from Prompt</h2>
+
+            <div class="input-group">
+                <label for="prompt">Describe your table:</label>
+                <textarea id="prompt"
+                    placeholder="Example: Create a Premier League table with team name, position, points, wins, losses..."></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="rowCount">Number of rows:</label>
+                <input type="number" id="rowCount" value="20" min="1" max="10000">
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="generateFromPrompt()">
+                    <span id="generateBtnText">Generate Dataset</span>
+                    <span id="generateSpinner" class="spinner hidden"></span>
+                </button>
+                <button class="btn btn-secondary" onclick="clearData()">Clear</button>
+            </div>
+
+            <div id="alert" class="hidden"></div>
+        </div>
+
+        <!-- Pattern Mode -->
+        <div id="patternMode" class="card hidden">
+            <h2 class="card-title">Generate from Sample Dataset</h2>
+
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Click to upload or drag & drop</div>
+                <div class="upload-hint">Supports CSV, Excel, JSON (Max 10MB)</div>
+            </div>
+
+            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,.json" class="hidden"
+                onchange="handleFileSelect(event)">
+
+            <div id="fileInfo" class="file-info hidden">
+                <strong>Uploaded:</strong> <span id="fileName"></span>
+            </div>
+
+            <div class="input-group">
+                <label for="patternRowCount">Number of rows to generate:</label>
+                <input type="number" id="patternRowCount" value="100" min="1" max="100000">
+            </div>
+
+            <div class="input-group">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" id="useWebEnrichment" style="width: auto; cursor: pointer;">
+                    <span>🌐 Use web enrichment (expand with reference data)</span>
+                </label>
+                <small style="color: var(--text-muted); margin-top: 0.25rem; display: block;">
+                    Searches for related datasets online to make your synthetic data more diverse and realistic.
+                </small>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="generateFromSampleBtn" onclick="generateFromSample()" disabled>
+                    <span id="patternBtnText">Generate from Pattern</span>
+                    <span id="patternSpinner" class="spinner hidden"></span>
+                </button>
+                <button class="btn btn-secondary" onclick="clearData()">Clear</button>
+            </div>
+
+            <div id="patternAlert" class="hidden"></div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="card hidden">
+            <h2 class="card-title">Generated Data</h2>
+
+            <div id="stats" class="stats hidden"></div>
+
+            <div class="table-container">
+                <table id="dataTable">
+                    <thead id="tableHead"></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'prompt';
+        let uploadedFileId = null;
+
+        function switchMode(mode) {
+            currentMode = mode;
+
+            // Update buttons
+            document.getElementById('promptModeBtn').classList.toggle('active', mode === 'prompt');
+            document.getElementById('patternModeBtn').classList.toggle('active', mode === 'pattern');
+
+            // Update content
+            document.getElementById('promptMode').classList.toggle('hidden', mode !== 'prompt');
+            document.getElementById('patternMode').classList.toggle('hidden', mode !== 'pattern');
+        }
+
+        // File Upload Handling
+        const uploadZone = document.getElementById('uploadZone');
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        async function handleFile(file) {
+            // Validate file
+            const validTypes = ['text/csv', 'application/json', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+            const validExtensions = ['.csv', '.json', '.xls', '.xlsx'];
+            const fileExt = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+            if (!validExtensions.includes(fileExt)) {
+                showAlert('Please upload a CSV, Excel, or JSON file', 'error', 'patternAlert');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showAlert('File too large. Maximum 10MB', 'error', 'patternAlert');
+                return;
+            }
+
+            // Upload file
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    uploadedFileId = result.file_id;
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileInfo').classList.remove('hidden');
+                    document.getElementById('generateFromSampleBtn').disabled = false;
+                    showAlert('✓ File uploaded successfully!', 'success', 'patternAlert');
+                } else {
+                    showAlert('Upload failed: ' + result.error, 'error', 'patternAlert');
+                }
+            } catch (error) {
+                showAlert('Upload error: ' + error.message, 'error', 'patternAlert');
+            }
+        }
+
+        async function generateFromPrompt() {
+            const prompt = document.getElementById('prompt').value.trim();
+            const rowCount = parseInt(document.getElementById('rowCount').value);
+
+            if (!prompt) {
+                showAlert('Please enter a prompt describing your table', 'error', 'alert');
+                return;
+            }
+
+            toggleLoading('generateBtnText', 'generateSpinner', true);
+
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt, row_count: rowCount })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showAlert(`✓ Generated ${result.generation_stats.rows_generated} rows successfully!`, 'success', 'alert');
+                    displayStats(result);
+                    await fetchAndDisplayData();
+                } else {
+                    showAlert('Generation failed: ' + result.error, 'error', 'alert');
+                }
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error', 'alert');
+            } finally {
+                toggleLoading('generateBtnText', 'generateSpinner', false);
+            }
+        }
+
+        async function generateFromSample() {
+            if (!uploadedFileId) {
+                showAlert('Please upload a file first', 'error', 'patternAlert');
+                return;
+            }
+
+            const rowCount = parseInt(document.getElementById('patternRowCount').value);
+            const useWebEnrichment = document.getElementById('useWebEnrichment').checked;
+
+            toggleLoading('patternBtnText', 'patternSpinner', true);
+
+            try {
+                const response = await fetch('/api/generate_from_sample', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        file_id: uploadedFileId,
+                        n_rows: rowCount,
+                        use_web_enrichment: useWebEnrichment
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const sampleRows = result.sample_info.sample_rows;
+                    const genRows = result.generation_stats.rows_generated;
+                    let message = `✓ Learned from ${sampleRows} rows, generated ${genRows} synthetic rows!`;
+
+                    if (result.web_enrichment_used && result.enrichment_info) {
+                        const enrichInfo = result.enrichment_info;
+                        message += ` (Enriched: ${enrichInfo.original_rows} → ${enrichInfo.enriched_rows} rows)`;
+                    }
+
+                    showAlert(message, 'success', 'patternAlert');
+                    displayStats(result);
+                    await fetchAndDisplayData();
+                } else {
+                    showAlert('Generation failed: ' + result.error, 'error', 'patternAlert');
+                }
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error', 'patternAlert');
+            } finally {
+                toggleLoading('patternBtnText', 'patternSpinner', false);
+            }
+        }
+
+        function toggleLoading(textId, spinnerId, isLoading) {
+            const text = document.getElementById(textId);
+            const spinner = document.getElementById(spinnerId);
+
+            if (isLoading) {
+                text.textContent = 'Generating...';
+                spinner.classList.remove('hidden');
+            } else {
+                text.textContent = text.id.includes('pattern') ? 'Generate from Pattern' : 'Generate Dataset';
+                spinner.classList.add('hidden');
+            }
+        }
+
+        function displayStats(result) {
+            const statsHtml = `
+                <div class="stat-card">
+                    <div class="stat-label">Rows Generated</div>
+                    <div class="stat-value">${result.generation_stats.rows_generated}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Mode</div>
+                    <div class="stat-value">${result.mode === 'pattern' ? '📊 Pattern' : '💬 Prompt'}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Speed</div>
+                    <div class="stat-value">${Math.round(result.generation_stats.rows_per_second)}/s</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Duration</div>
+                    <div class="stat-value">${result.generation_stats.duration_seconds.toFixed(2)}s</div>
+                </div>
+            `;
+
+            document.getElementById('stats').innerHTML = statsHtml;
+            document.getElementById('stats').classList.remove('hidden');
+        }
+
+        async function fetchAndDisplayData() {
+            try {
+                const response = await fetch('/api/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ limit: 100 })
+                });
+
+                const data = await response.json();
+                displayTable(data.rows);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function displayTable(rows) {
+            if (!rows || rows.length === 0) return;
+
+            const table = document.getElementById('dataTable');
+            const thead = document.getElementById('tableHead');
+            const tbody = document.getElementById('tableBody');
+
+            thead.innerHTML = '';
+            tbody.innerHTML = '';
+
+            const headers = Object.keys(rows[0]);
+            const headerRow = document.createElement('tr');
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header.replace(/_/g, ' ').toUpperCase();
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+
+            rows.forEach(row => {
+                const tr = document.createElement('tr');
+                headers.forEach(header => {
+                    const td = document.createElement('td');
+                    let value = row[header];
+
+                    if (typeof value === 'string' && value.match(/^\d{4}-\d{2}-\d{2}/)) {
+                        value = new Date(value).toLocaleString();
+                    }
+
+                    if (typeof value === 'number') {
+                        value = value.toLocaleString();
+                    }
+
+                    td.textContent = value || '';
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('results').classList.remove('hidden');
+        }
+
+        async function clearData() {
+            try {
+                await fetch('/api/clear', { method: 'POST' });
+                document.getElementById('results').classList.add('hidden');
+                document.getElementById('stats').classList.add('hidden');
+                document.getElementById('prompt').value = '';
+                uploadedFileId = null;
+                document.getElementById('fileInfo').classList.add('hidden');
+                document.getElementById('generateFromSampleBtn').disabled = true;
+                showAlert('System cleared', 'success', currentMode === 'prompt' ? 'alert' : 'patternAlert');
+            } catch (error) {
+                showAlert('Error clearing data', 'error', currentMode === 'prompt' ? 'alert' : 'patternAlert');
+            }
+        }
+
+        function showAlert(message, type, alertId) {
+            const alert = document.getElementById(alertId);
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.classList.remove('hidden');
+
+            setTimeout(() => {
+                alert.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>
